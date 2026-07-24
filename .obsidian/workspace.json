@@ -1,0 +1,228 @@
+{
+  "main": {
+    "id": "b973ab0be1aebf44",
+    "type": "split",
+    "children": [
+      {
+        "id": "d372b0bcb0b60291",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7c248500a89543cf",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Grafik Görünümü"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "61901a9967669134",
+    "type": "split",
+    "children": [
+      {
+        "id": "a84cca4783c301ab",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6273164f388200f3",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Dosya Gezgini"
+            }
+          },
+          {
+            "id": "16ed9635c570b967",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Ara"
+            }
+          },
+          {
+            "id": "6792ada545549e7b",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Yer İmleri"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "49967c193e073e84",
+    "type": "split",
+    "children": [
+      {
+        "id": "9488acabd3e8d8ce",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "20584f602d89f5c1",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Geri Bağlantılar"
+            }
+          },
+          {
+            "id": "1c615e1d5f285c07",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Giden bağlantılar"
+            }
+          },
+          {
+            "id": "1962a35bb817632d",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiketler"
+            }
+          },
+          {
+            "id": "4204a9188d434eb4",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Tüm özellikler"
+            }
+          },
+          {
+            "id": "94a8e6d221a330b0",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Anahat"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Hızlı geçişi aç": false,
+      "graph:Grafik görünümünü aç": false,
+      "canvas:Yeni tuval oluşturun": false,
+      "daily-notes:Bugünün Notunu Aç": false,
+      "templates:Şablon ekle": false,
+      "command-palette:Komut paletini aç": false,
+      "bases:Yeni taban oluştur": false
+    }
+  },
+  "active": "7c248500a89543cf",
+  "lastOpenFiles": [
+    "02 Linux & OS Internals/Branch Shell Power.md",
+    "README.md",
+    "12 AI Security/AI Security.md",
+    "11 Hardware & IoT Security/Hardware & IoT Security.md",
+    "10 Reverse Engineering & Malware/Reverse Engineering & Malware.md",
+    "09 Cloud Security/Cloud Security.md",
+    "08 Tooling & Scripting/Tooling & Scripting.md",
+    "07 DevSecOps/DevSecOps.md",
+    "06 Application Security/Application Security.md",
+    "05 Defensive Security/Defensive Security.md",
+    "04 Offensive Security/Offensive Security.md",
+    "03 Cryptography/Cryptography.md",
+    "02 Linux & OS Internals/Linux & OS Internals.md",
+    "01 Networking/Networking.md",
+    "Cyber Security.md",
+    "08 Tooling & Scripting/Programming for Security Masterclass.md",
+    "08 Tooling & Scripting/Tooling Masterclass.md",
+    "07 DevSecOps/Docker and Containers Masterclass.md",
+    "06 Application Security/OWASP Top 10 Masterclass.md",
+    "06 Application Security/API Security Masterclass.md",
+    "06 Application Security/Web Exploitation Masterclass.md",
+    "06 Application Security/Web Fundamentals Masterclass.md",
+    "05 Defensive Security/Defensive Groundwork Masterclass.md",
+    "05 Defensive Security/Advanced Defenses Masterclass.md",
+    "04 Offensive Security/Network Attacks and Recon Masterclass.md",
+    "04 Offensive Security/Anti-Forensics and ShadowStep Masterclass.md",
+    "12 AI Security",
+    "11 Hardware & IoT Security",
+    "10 Reverse Engineering & Malware",
+    "09 Cloud Security",
+    "08 Tooling & Scripting",
+    "07 DevSecOps",
+    "06 Application Security",
+    "05 Defensive Security",
+    "04 Offensive Security",
+    "03 Cryptography",
+    "assets/lnx_path_resolution.svg",
+    "assets/lnx_suid_flow.svg",
+    "assets/lnx_io_streams.svg",
+    "assets/lnx_permission_bits.svg",
+    "assets/lab_6989b1062386d3517f652edd-1778497462926.png",
+    "assets/lab_6989b1062386d3517f652edd-1777546628331.png",
+    "assets/lab_6989b1062386d3517f652edd-1777546602304.png",
+    "assets/lab_6989b1062386d3517f652edd-1777546574427.png",
+    "assets/lab_6989b1062386d3517f652edd-1777546470035.png",
+    "assets/lab_691e303c8bb7e99b93a58132-1777666543742.png"
+  ]
+}
