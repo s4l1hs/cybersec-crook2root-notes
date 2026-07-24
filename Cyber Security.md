@@ -17,7 +17,7 @@ Color: "#FFFFFF"
 flowchart TD
     ROOT["🌐 Cyber Security Root"]
     ROOT --> D01["🌐 Networking"]
-    ROOT --> D02["🐧 Linux & OS Internals"]
+    ROOT --> D02["💻 OS Internals"]
     ROOT --> D03["🔐 Cryptography"]
     ROOT --> D04["⚔️ Offensive Security"]
     ROOT --> D05["🛡️ Defensive Security"]
@@ -33,7 +33,7 @@ flowchart TD
 
 ## 🌳 The Twelve Domains
 - 🌐 **[[Networking]]** — How data moves — OSI/TCP-IP, addressing, DNS/DHCP/NAT, routing, and the protocols both sides target.
-- 🐧 **[[Linux & OS Internals]]** — The operating system a hacker lives in — the CLI arsenal, filesystem, permissions & processes, and privilege escalation.
+- 🐧 **[[OS Internals]]** — The operating system a hacker lives in — the CLI arsenal, filesystem, permissions & processes, and privilege escalation.
 - 🔐 **[[Cryptography]]** — Encoding vs encryption vs hashing, symmetric & asymmetric crypto, signatures, TLS/JWT, and cracking.
 - ⚔️ **[[Offensive Security]]** — The attacker's craft — methodology, recon, exploitation, and total root control. Authorized simulation only.
 - 🛡️ **[[Defensive Security]]** — The defender's craft — controls & hardening, logging, EDR/SIEM, and detection engineering.

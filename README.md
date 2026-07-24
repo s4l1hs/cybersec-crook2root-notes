@@ -34,7 +34,7 @@ Every note declares exactly **one** parent. There are **no lateral links between
 flowchart TD
     R["🌐 Cyber Security Root"]
     R --> D1["🌐 Networking"]
-    R --> D2["🐧 Linux & OS Internals"]
+    R --> D2["💻 OS Internals"]
     R --> D3["🔐 Cryptography"]
     R --> D4["⚔️ Offensive Security"]
     R --> D5["🛡️ Defensive Security"]
@@ -51,7 +51,7 @@ flowchart TD
 | # | Domain | Colour | What lives here |
 |:-:|:--|:--|:--|
 | 01 | 🌐 **Networking** | `#42D4F4` Cyan | OSI/TCP-IP, addressing & subnetting, DNS/DHCP/NAT, routing, core protocols |
-| 02 | 🐧 **Linux & OS Internals** | `#F58231` Orange | The CLI arsenal, filesystem, permissions & processes, privilege escalation, Windows/AD internals |
+| 02 | 🐧 **OS Internals** | `#FFA500` Orange | The CLI arsenal, filesystem, permissions & processes, privilege escalation, Windows/AD internals |
 | 03 | 🔐 **Cryptography** | `#FFE119` Yellow | Encoding vs encryption vs hashing, symmetric/asymmetric, signatures, TLS/JWT, cracking |
 | 04 | ⚔️ **Offensive Security** | `#E6194B` Red | Methodology, recon, social engineering, exploitation, exploit dev, anti-forensics, CTF & stego |
 | 05 | 🛡️ **Defensive Security** | `#4363D8` Blue | Controls & hardening, logging, EDR/SIEM, detection engineering |
@@ -67,28 +67,9 @@ flowchart TD
 
 ---
 
-## 🛠️ Featured Open-Source Tools
-
-Crook2Root ships documentation for two purpose-built command-line tools that thread through the whole vault:
-
-### 🔐 Hashsmith — *the cryptography & hashing multi-tool*
-The Swiss-army knife for the four operations you repeat constantly in security work: **encode · decode · hash · crack**. It collapses a dozen separate commands (`base64`, `xxd`, `openssl`, `hashid`, a cracker) behind one consistent interface, with an **auto-detect** mode that identifies formats and peels layered encodings for you.
-```bash
-pipx install hashsmith
-hashsmith decode --auto "Q3Jvb2syUm9vdA=="      # → Crook2Root
-hashsmith crack --auto <hash> -w rockyou.txt
-```
-
-### 🧹 ShadowStep — *the modular anti-forensics toolkit*
-A Python-based **red-team-emulation / IR-training** toolkit unifying three post-engagement capabilities — **Log Manipulation · Data Shredding · Network Identity Masking** — behind one interface, so a blue team can rehearse *detecting* each move. Every command is documented alongside the artifact it cannot hide.
-
-> ⚠️ Both tools are documented for **authorized assessment, CTFs, and defensive testing only.**
-
----
-
 ## ⚙️ Real-World Application
 
-This vault is not academic — it is **optimized for practice**:
+This vault is academic and **optimized for practice**:
 
 - **⚔️ Offensive research on bare-metal, native Linux.** The material assumes a real attack host — e.g. a **ThinkPad running BlackArch** — where native hardware access unlocks Wi-Fi monitor mode & injection, full-speed GPU hash cracking, and USB/SDR tooling that virtual machines cripple. Bare-metal isn't a preference here; it's a capability.
 - **🏗️ Engineering secure backends & architectures.** The DevSecOps, Application Security, Cryptography, and Tooling trees are written for builders — hardening containers, choosing the right KDF, defending APIs, and designing systems that survive the very attacks documented in the offensive trees.
@@ -103,7 +84,7 @@ This is an **Obsidian vault**. To get the full experience — the interlinked gr
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/<your-username>/crook2root.git
+git clone https://github.com/s4l1hs/cybersec-crook2root-notes.git
 
 # 2. Open Obsidian → "Open folder as vault" → select the cloned folder
 ```

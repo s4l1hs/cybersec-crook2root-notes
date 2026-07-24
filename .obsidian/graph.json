@@ -15,35 +15,14 @@
       }
     },
     {
-      "query": "path:\"01 Networking\"",
+      "query": "tag:#tree/os",
       "color": {
         "a": 1,
-        "rgb": 4379892
-      }
-    },
-    {
-      "query": "tag:#tree/linux",
-      "color": {
-        "a": 1,
-        "rgb": 16089649
-      }
-    },
-    {
-      "query": "path:\"02 Linux & OS Internals\"",
-      "color": {
-        "a": 1,
-        "rgb": 16089649
+        "rgb": 16753920
       }
     },
     {
       "query": "tag:#tree/crypto",
-      "color": {
-        "a": 1,
-        "rgb": 16769305
-      }
-    },
-    {
-      "query": "path:\"03 Cryptography\"",
       "color": {
         "a": 1,
         "rgb": 16769305
@@ -57,21 +36,7 @@
       }
     },
     {
-      "query": "path:\"04 Offensive Security\"",
-      "color": {
-        "a": 1,
-        "rgb": 15079755
-      }
-    },
-    {
       "query": "tag:#tree/defensive",
-      "color": {
-        "a": 1,
-        "rgb": 4416472
-      }
-    },
-    {
-      "query": "path:\"05 Defensive Security\"",
       "color": {
         "a": 1,
         "rgb": 4416472
@@ -85,21 +50,7 @@
       }
     },
     {
-      "query": "path:\"06 Application Security\"",
-      "color": {
-        "a": 1,
-        "rgb": 9510580
-      }
-    },
-    {
       "query": "tag:#tree/devsecops",
-      "color": {
-        "a": 1,
-        "rgb": 3978315
-      }
-    },
-    {
-      "query": "path:\"07 DevSecOps\"",
       "color": {
         "a": 1,
         "rgb": 3978315
@@ -113,21 +64,7 @@
       }
     },
     {
-      "query": "path:\"08 Tooling & Scripting\"",
-      "color": {
-        "a": 1,
-        "rgb": 4626832
-      }
-    },
-    {
       "query": "tag:#tree/cloud",
-      "color": {
-        "a": 1,
-        "rgb": 16432852
-      }
-    },
-    {
-      "query": "path:\"09 Cloud Security\"",
       "color": {
         "a": 1,
         "rgb": 16432852
@@ -141,13 +78,6 @@
       }
     },
     {
-      "query": "path:\"10 Reverse Engineering & Malware\"",
-      "color": {
-        "a": 1,
-        "rgb": 12578629
-      }
-    },
-    {
       "query": "tag:#tree/hardware",
       "color": {
         "a": 1,
@@ -155,21 +85,7 @@
       }
     },
     {
-      "query": "path:\"11 Hardware & IoT Security\"",
-      "color": {
-        "a": 1,
-        "rgb": 10117924
-      }
-    },
-    {
       "query": "tag:#tree/ai",
-      "color": {
-        "a": 1,
-        "rgb": 15741670
-      }
-    },
-    {
-      "query": "path:\"12 AI Security\"",
       "color": {
         "a": 1,
         "rgb": 15741670
@@ -189,10 +105,10 @@
   "nodeSizeMultiplier": 1.08914496527778,
   "lineSizeMultiplier": 1.79543402777778,
   "collapse-forces": false,
-  "centerStrength": 0.498958333333333,
-  "repelStrength": 10.0677083333333,
+  "centerStrength": 0.546831597222222,
+  "repelStrength": 9.95920138888889,
   "linkStrength": 1,
-  "linkDistance": 72,
-  "scale": 0.4755169750816359,
+  "linkDistance": 99,
+  "scale": 0.4550818050331759,
   "close": true
 }
