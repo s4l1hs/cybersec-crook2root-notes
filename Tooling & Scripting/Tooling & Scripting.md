@@ -1,5 +1,5 @@
 ---
-title: Tooling & Scripting
+title: "Tooling & Scripting"
 aliases:
   - Tooling & Scripting Hub
 tags:
@@ -7,7 +7,7 @@ tags:
   - cyber/moc
 Domain:
   - "[[Cyber Security]]"
-Color: "#469990"
+Color: "#708090"
 ---
 
 # 🧰 Tooling & Scripting
@@ -15,9 +15,22 @@ Color: "#469990"
 > [!abstract] The Domain
 > Building and wielding tools — Python & Go for security, and the core pentest toolkit. Part of the domain map at [[Cyber Security]].
 
-## 📄 Master Notes
-- [[Programming for Security Masterclass]]
-- [[Tooling Masterclass]]
+## Two trunks
+
+```mermaid
+flowchart TD
+    H["Tooling & Scripting"] --> P["Programming for Security"]
+    H --> T["Tooling"]
+```
+
+- [[Programming for Security]]
+- [[Tooling]]
+
+```shell-session
+engineer@workstation:~$ printf '%s\n' programming tooling
+programming
+tooling
+```
 
 ---
 > 🌐 Back to the domain map: [[Cyber Security]]

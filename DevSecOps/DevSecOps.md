@@ -16,7 +16,7 @@ Color: "#3CB44B"
 > Security baked into the pipeline — containers, orchestration, and secure delivery. Part of the domain map at [[Cyber Security]].
 
 ## 📄 Master Notes
-- [[Docker and Containers Masterclass]]
+- [[Docker and Containers]]
 
 ---
 > 🌐 Back to the domain map: [[Cyber Security]]

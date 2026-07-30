@@ -14,8 +14,8 @@ Color: "#911EB4"
 > A sub-tree of the **Application Security** domain, grouping related master notes into one branch of the graph.
 
 ## 📄 Notes in this branch
-- [[Web Fundamentals Masterclass]]
-- [[Web Exploitation Masterclass]]
+- [[Web Fundamentals]]
+- [[Web Exploitation]]
 
 ---
 > 🔼 Up: [[Application Security]]

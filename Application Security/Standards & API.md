@@ -14,8 +14,8 @@ Color: "#911EB4"
 > A sub-tree of the **Application Security** domain, grouping related master notes into one branch of the graph.
 
 ## 📄 Notes in this branch
-- [[OWASP Top 10 Masterclass]]
-- [[API Security Masterclass]]
+- [[OWASP Top 10]]
+- [[API Security]]
 
 ---
 > 🔼 Up: [[Application Security]]

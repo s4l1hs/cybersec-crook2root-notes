@@ -16,8 +16,8 @@ Color: "#4363D8"
 > The defender's craft — controls & hardening, logging, EDR/SIEM, and detection engineering. Part of the domain map at [[Cyber Security]].
 
 ## 📄 Master Notes
-- [[Defensive Groundwork Masterclass]]
-- [[Advanced Defenses Masterclass]]
+- [[Defensive Groundwork]]
+- [[Advanced Defenses]]
 
 ---
 > 🌐 Back to the domain map: [[Cyber Security]]
