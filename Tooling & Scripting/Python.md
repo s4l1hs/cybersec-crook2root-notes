@@ -83,5 +83,47 @@ def redact(headers: dict[str, str]) -> dict[str, str]:
 
 This redaction must happen before serialization and logging—not after evidence has already leaked.
 
+## HTTP, TLS & API engineering
+
+Use one client/session, explicit connect/read/write/pool timeouts, bounded redirects, trusted CA bundles, response-size limits, retry policies restricted to idempotent operations, and typed validation of JSON. A `200` response can still be an application error.
+
+```python
+import httpx
+
+limits = httpx.Limits(max_connections=20, max_keepalive_connections=10)
+timeout = httpx.Timeout(connect=3, read=5, write=5, pool=3)
+with httpx.Client(verify=True, timeout=timeout, limits=limits,
+                  headers={"User-Agent": "C2R-Auditor/1.0"}) as client:
+    response = client.get("https://app.example.test/health")
+    response.raise_for_status()
+    body = response.json()
+    if body.get("status") != "ok": raise RuntimeError("unhealthy application state")
+```
+
+## Binary & packet work
+
+Use `bytes`, `bytearray`, `memoryview`, `struct`, and explicit endianness. Validate lengths before unpacking. Scapy is powerful for authorized packet labs, but packet generation needs scope/rate gates and packet-capture verification.
+
+## Packaging, typing & tests
+
+Use `pyproject.toml`, isolated builds, locked dependencies, console entry points, type checking, linting, unit tests, property tests, and fuzzing for parsers. Do not rely on the current working directory; use package resources and explicit paths.
+
+```shell-session
+engineer@lab:~$ python -m pytest -q --disable-warnings
+42 passed in 1.18s
+engineer@lab:~$ mypy src
+Success: no issues found in 12 source files
+engineer@lab:~$ ruff check .
+All checks passed!
+```
+
+## Crook2Root master project
+
+Build an authenticated API posture collector with configuration schema, secret-provider interface, allowlisted hosts, async concurrency, pagination, backoff, TLS validation, redaction, JSONL evidence, metrics, cancellation, and resumable checkpoints. Mock API failures, fuzz JSON normalization, run an integration fixture, generate an SBOM, and publish a signed package.
+
+## Failure analysis
+
+Event-loop blocking comes from synchronous calls inside async tasks. Memory spikes come from gathering unbounded responses. Hung runs indicate missing timeouts/cancellation. Unicode/bytes bugs arise at protocol boundaries. Nondeterministic tests often depend on wall clock, DNS, global environment, or unordered concurrency—inject those dependencies.
+
 ---
 > 🔼 Up: [[Programming for Security]]

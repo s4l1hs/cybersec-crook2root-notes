@@ -75,5 +75,40 @@ This is a triage lead, not proof. Validate asset role, scanner allowlists, NAT, 
 
 Monitor ingestion delay, missing hosts, parsing failures, timestamp skew, license volume, skipped searches, search concurrency, and retention. Use summary indexing/data-model acceleration only after validating semantic equivalence. Version-control detections, test them against positive/negative corpora, and attach runbooks with severity, owner, suppression boundaries, and rollback.
 
+## Data onboarding from zero
+
+Define source owner, data contract, transport, index, source type, timestamps, line breaking, encoding, field extraction, sensitivity, retention, daily volume, and expected host population before ingestion.
+
+```text
+source: Microsoft-Windows-Sysmon/Operational
+sourcetype: XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
+index: endpoint
+time basis: SystemTime UTC
+expected hosts: 1,240 ± 5%
+retention: 90 days searchable
+owner: Endpoint Engineering
+```
+
+## Search execution model
+
+Streaming commands operate event by event; transforming commands aggregate; centralized commands can move work to the search head. Filter by index/time/source type early, avoid leading wildcards, request needed fields only, and use `tstats` with accelerated data models when semantics match.
+
+## Detection workflow
+
+```spl
+index=endpoint sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1 earliest=-24h
+| eval parent=lower(ParentImage), child=lower(Image)
+| where like(parent,"%\\powershell.exe") AND like(child,"%\\whoami.exe")
+| stats count values(CommandLine) as command values(User) as users by host parent child
+```
+
+Inspect raw positives, add environment-aware constraints, set lookback longer than schedule interval, define grouping/throttling, and attach a runbook. Test late data and clock skew.
+
+## Mastery lab
+
+Onboard a JSONL canary through HEC. Build extraction checks, missing-data alert, detection, dashboard panel, and drilldown. Break timestamps and field names deliberately; diagnose through `_indextime`, source-type metrics, Job Inspector, and raw events.
+
+Zero results may mean a time, permission, source type, or ingestion problem. Slow searches require Job Inspector, scan count, command type, acceleration, and concurrency analysis. Duplicate events require forwarder checkpoint, rotation, and HEC acknowledgment review.
+
 ---
 > 🔼 Up: [[SIEM & Detection Engineering Tools]]

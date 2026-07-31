@@ -64,5 +64,36 @@ Avoid fragile rules built from packer stubs, compiler artifacts, or one public s
 
 Sign/version bundles, compile in CI, validate syntax, test positives/near-misses/benign corpora, and record rule provenance. Preserve original sample hashes and do not execute unknown objects. A YARA match is a triage classification, not automatic proof of maliciousness.
 
+## Rule development methodology
+
+Begin with labeled samples and a hypothesis about stable family or behavior features. Extract candidate strings, structure, imports, sections, constants, and metadata. Remove environment-specific/common-library artifacts, then combine independent features.
+
+```yara
+$prologue = { 55 48 89 E5 48 83 EC ?? }
+$variant  = { 48 8D 05 [4-12] ( 48 89 C7 | 48 89 C6 ) E8 ?? ?? ?? ?? }
+```
+
+Hex patterns support wildcards, nibble wildcards, alternatives, and bounded jumps. Wide, nocase, XOR, Base64, and regex matching can expand work dramatically; profile them against large benign objects.
+
+## Format modules
+
+The PE module exposes headers, imports, exports, resources, sections, signatures, and timestamps. ELF, Mach-O, .NET, hash, math, and other modules add format-aware predicates when available. Structural checks are usually more stable than raw offsets.
+
+## Mastery lab
+
+Use five authorized positives, five near variants, and at least 10,000 benign files. Compile a tagged rule, measure speed, investigate every false positive, and preserve a regression corpus.
+
+```shell-session
+analyst@lab:~$ time yara -r -p 4 rules/c2r-family.yar benign-corpus/ > benign.matches
+real    0m8.421s
+analyst@lab:~$ wc -l benign.matches
+0 benign.matches
+analyst@lab:~$ yara -s rules/c2r-family.yar positive-corpus/
+C2R_Family positive-corpus/sample-03.bin
+0x41a:$config_marker: C2R-CONFIG-V2
+```
+
+Too many matches means weak features; no matches suggests encoding, packing, offsets, module availability, or filesize guards. Slow scans require reducing expensive regex/modifiers, bounding filesize, compiling rules, and profiling corpora.
+
 ---
 > 🔼 Up: [[Malware & Content Analysis Tools]]

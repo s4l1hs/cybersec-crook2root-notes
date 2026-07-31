@@ -24,12 +24,16 @@ flowchart LR
     W --> R["Risk, remediation, retest"]
 ```
 
-## Master notes
+## 🗺️ Zero-to-Mastery Learning Path
 
-- [[OWASP Web Testing Methodology]]
-- [[WAF Testing & Bypass Methodology]]
-- [[Business Logic Testing]]
-- [[Web Authentication Testing]]
+1. [[OWASP Web Testing Methodology]]
+2. [[Web Identity & Access Control]]
+3. [[Web Injection Testing]]
+4. [[Client-Side Web Security]]
+5. [[HTTP Architecture & Advanced Web Attacks]]
+6. [[File, Parser & Serialization Security]]
+7. [[Business Logic & Workflow Security]]
+8. [[CMS & Framework Security Testing]]
 
 ## Practical artifact
 

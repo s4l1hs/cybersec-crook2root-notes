@@ -74,5 +74,26 @@ Define `HOME_NET`, checksum policy, stream depth, memcaps, capture threads, CPU 
 
 For IPS, test fail-open/fail-closed behavior, asymmetric routing, maintenance bypass, verdict latency, and rollback. A rule promotion pipeline should compile/test, replay positive and negative pcaps, benchmark performance, deploy canary sensors, and monitor alert volume.
 
+## Rule-engine depth
+
+Suricata normalizes and reassembles traffic before app-layer sticky buffers are evaluated. Prefer fields such as `http.uri`, `http.header`, `dns.query`, and `tls.sni` over brittle raw offsets. Understand direction, established state, transaction boundaries, and normalization.
+
+Content controls include `depth`, `offset`, `distance`, `within`, `startswith`, `endswith`, `nocase`, byte tests/jumps, PCRE, flowbits, datasets, thresholds, and transforms. Put selective inexpensive conditions before regex.
+
+## EVE operations
+
+EVE emits alert, flow, stats, DNS, HTTP, TLS, file, anomaly, and protocol events. Preserve sensor ID, interface, rule metadata, flow ID, timestamps, and capture references. Community ID supports cross-tool correlation.
+
+```shell-session
+analyst@sensor:~$ jq -r 'select(.event_type=="stats") | [.timestamp,.stats.capture.kernel_drops,.stats.decoder.pkts] | @tsv' eve.json | tail -1
+2026-07-30T11:22:00.000000+0000	0	1842201
+```
+
+## Mastery lab
+
+Write HTTP marker, DNS-name, and TLS-SNI rules. Replay positive, near-miss, segmented, and benign pcaps. Verify alerts plus app-layer logs, profile cost, and test reload. Exercise inline drop only in a disposable range with bypass and rollback documented.
+
+No alert requires checking flow direction/state, buffer, protocol detection, segmentation, encryption, HOME_NET, and rule loading. Duplicate alerts require transaction/threshold analysis. Packet drops invalidate coverage and must be treated as sensor incidents.
+
 ---
 > 🔼 Up: [[Network Detection & Monitoring Tools]]

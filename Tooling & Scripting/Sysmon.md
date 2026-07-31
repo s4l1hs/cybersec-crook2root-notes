@@ -89,5 +89,38 @@ TimeCreated          Id Message
 
 Validate configuration changes with benign canary actions and confirm collection at the SIEM. Monitor service/driver health, log channel capacity, forwarder backlog, config hash, and unexpected Event ID 4 service-state changes.
 
+## Configuration engineering
+
+Design from detection requirements backward. For every rule identify behavior, event ID, required fields, expected benign sources, event volume, retention cost, and response action. A community configuration is a starting hypothesis, not a finished enterprise policy.
+
+```xml
+<RuleGroup name="C2R PowerShell Child Process" groupRelation="and">
+  <ProcessCreate onmatch="include">
+    <ParentImage condition="end with">\powershell.exe</ParentImage>
+    <Image condition="end with">\whoami.exe</Image>
+  </ProcessCreate>
+</RuleGroup>
+```
+
+## Deployment lifecycle
+
+Baseline in a representative lab, replay canaries, estimate events per endpoint/day, pilot workstation/server rings, monitor CPU/log growth/forwarding delay, deploy with rollback, and review exclusions quarterly. Hashing, network, and image-load events can be high volume.
+
+## Correlation lab
+
+Launch a benign PowerShell process that runs `whoami`, resolves a test name, and writes a canary. Correlate ProcessGuid across process, DNS, network, and file events, then locate matching Windows Security and SIEM records.
+
+```powershell
+PS C:\> $e=Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational';StartTime=(Get-Date).AddMinutes(-10)}
+PS C:\> $e | Group-Object Id | Sort-Object Count -Descending | Select Count,Name
+Count Name
+----- ----
+   42 1
+   18 3
+    7 22
+```
+
+No events can mean service failure, filtering, wrong channel, or forwarding failure—not absence of behavior. Duplicate events may come from overlapping rules or collectors. Missing fields may reflect schema/version or collection policy.
+
 ---
 > 🔼 Up: [[Endpoint Telemetry Tools]]

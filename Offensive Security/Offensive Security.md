@@ -19,16 +19,18 @@ Color: "#DC143C"
 
 ```mermaid
 flowchart TD
-    O["Offensive Security"] --> P["Penetration Testing Lifecycle"]
+    O["Offensive Security"] --> P["Penetration Testing"]
     O --> R["Red Team Operations"]
     O --> E["Exploit Development"]
     O --> S["Social Engineering"]
 ```
 
-- [[Penetration Testing]]
-- [[Red Team Operations]]
-- [[Exploit Development]]
-- [[Social Engineering]]
+## 🗺️ Zero-to-Mastery Learning Path
+
+1. [[Penetration Testing]]
+2. [[Exploit Development]]
+3. [[Social Engineering]]
+4. [[Red Team Operations]]
 
 ```text
 Authorized assessment -> measured evidence -> bounded impact -> cleanup -> remediation validation

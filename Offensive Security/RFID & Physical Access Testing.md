@@ -104,5 +104,70 @@ Remediation: reduce sync interval; alert on stale controller; verify revocation 
 
 Prefer cryptographic credentials, diversified keys, secure enrollment, rapid revocation, anti-passback, controller hardening, monitored door sensors, and lifecycle integration with HR/identity systems.
 
+## Credential-system model
+
+Map credential technology, frequency, identifier/authentication mechanism, reader, controller, panel, door hardware, request-to-exit, alarm contacts, anti-passback, access rules, management server, logging, and identity lifecycle. A badge number is not the entire security system.
+
+Legacy low-frequency identifiers may transmit static IDs; higher-frequency smartcards can provide mutual authentication and diversified keys when correctly deployed. Technology name alone does not prove secure configuration.
+
+## Safe assessment workflow
+
+Inventory approved test credentials/readers, record facility and life-safety exclusions, observe normal transactions, identify technology without transmitting where possible, test only canary credentials, demonstrate at a noncritical test reader, and reconcile controller logs. Never interfere with emergency egress, fire systems, elevators, medical areas, or occupied secure spaces.
+
+```text
+Canary credential: FACILITY-TEST-0042
+Reader: LAB-DOOR-03
+Authorized window: 10:00–11:00 UTC
+Expected result: access granted once, anti-passback on replay
+Observed: two grants; replay protection absent at controller workflow
+```
+
+## Defense-in-depth
+
+Use cryptographic credentials, diversified keys, secure enrollment, rapid revocation, anti-passback where appropriate, PIN/biometric for high-risk zones, reader tamper monitoring, encrypted panel communication, segmented management, camera/alarm correlation, and physical-key governance. Reader replacement alone does not fix weak controller rules or identity lifecycle.
+
+## Mastery lab
+
+Model a three-zone facility with canary cards. Test issue/revoke, schedule, role, anti-passback, lost-card response, reader tamper alert, and log correlation. Produce an attack-path diagram from credential acquisition to business asset while respecting life safety and stopping at the first bounded proof.
+
 ---
 > 🔼 Up: [[Wireless & Physical Penetration Testing]]
+
+## Core Concept
+
+**RFID & Physical Access Testing** is the atomic learning objective of this note. Identify its trust boundary, prerequisites, attacker-controlled input or state, vulnerable transformation, violated security invariant, minimum evidence, business consequence, and safe stopping point. The mechanism must remain explainable without depending on a specific product.
+
+## Visual Attack Flow
+
+```mermaid
+flowchart LR
+    A["Scoped prerequisite"] --> B["RFID & Physical Access Testing mechanics"]
+    B --> C["Trust boundary crossed"]
+    C --> D["Bounded canary proof"]
+    D --> E["Detection, remediation & retest"]
+```
+
+## Practical Payloads & Execution
+
+```text
+exercise=RFID & Physical Access Testing
+cohort=privacy-approved canary group
+maximum_action=harmless marker
+real_credentials_collected=false
+```
+
+### Expected output
+
+```text
+prevented_or_reported=true
+participant_harm=none
+control_owner=identified
+```
+
+Treat the output as proof of only the stated condition. Repeat with a negative control, preserve timestamps and the affected build, and never expand impact merely because another path appears reachable.
+
+## Real-World Scenario
+
+A privacy-approved enterprise exercise applies **RFID & Physical Access Testing** with synthetic identities and a harmless canary action. Legal, HR, privacy, and the white team define prohibited themes and stop conditions; results measure process and control performance rather than individuals.
+
+The durable remediation belongs at the authoritative enforcement layer. Retest the original condition and meaningful variants while verifying legitimate workflows still function.

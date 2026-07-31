@@ -13,12 +13,22 @@ Color: "#DC143C"
 > [!abstract] Major pillar of [[Offensive Security]]
 > Authorized testing of the human attack surface: influence principles, pretext design, phishing and voice workflows, physical-security scenarios, payload-delivery governance, safety boundaries, measurement, and user-centered remediation.
 
-## Social-engineering notes
+```mermaid
+flowchart TD
+    S["Social Engineering"] --> H["Human Factors & Pretext"]
+    S --> P["Phishing & Messaging"]
+    S --> V["Voice, Help Desk & Identity"]
+    S --> F["Physical Social Engineering"]
+    S --> G["Exercise Governance & Metrics"]
+```
 
-- [[Social Engineering & Phishing]]
+## 🗺️ Zero-to-Mastery Learning Path
 
-> [!note] Expansion path
-> This pillar is ready for dedicated **spear-phishing**, **adversary-in-the-middle simulations**, **physical access**, **USB-device testing**, and **human-risk metrics** notes.
+1. [[Human Factors & Pretext Development]]
+2. [[Social Engineering Exercise Governance & Metrics]]
+3. [[Phishing & Messaging Security Testing]]
+4. [[Voice, Help Desk & Identity Verification]]
+5. [[Physical Social Engineering]]
 
 ---
 > 🔼 Up: [[Offensive Security]]

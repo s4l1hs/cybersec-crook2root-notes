@@ -98,5 +98,69 @@ Do not perform automated containment against unknown radios; neighboring busines
 
 Deploy signed managed WLAN profiles, certificate-based EAP, strict server-name validation, PMF, 802.1X/NAC on wired ports, wireless intrusion monitoring, inventory reconciliation, and user training that explains certificate warnings rather than teaching users to click through them.
 
+## Trust decision analysis
+
+Clients may select networks by saved SSID, security type, signal, previous BSSID, enterprise profile, and platform policy. Test whether an enterprise profile pins authentication-server trust or merely trusts a broad public/private CA. Observe auto-join, transition-mode, captive portal, and fallback behavior with canary devices.
+
+## Controlled rogue-AP design
+
+Use shielded space or approved channels/power, unique test SSID unless an exact-name simulation is authorized, no Internet forwarding by default, canary credentials only, explicit source labeling, remote monitoring, and a physical kill switch. Capture association and authentication metadata without collecting unrelated user traffic.
+
+```text
+AP identifier: C2R-ROGUE-01
+Location: RF enclosure
+Channel/power: 36 / minimum
+Clients: two inventory-tagged canaries
+Credential policy: generated, single-use
+Stop condition: unexpected client association
+```
+
+## Detection validation
+
+Compare wireless-controller rogue detection, wired switch MAC/port data, DHCP, RADIUS, DNS, endpoint WLAN events, and physical inventory. Test unknown AP, known SSID from wrong BSSID, unauthorized bridge, and canary client association. Validate response ownership and containment procedure.
+
+## Mastery lab
+
+Create legitimate and controlled rogue APs, then explain client choice under secure enterprise profile, intentionally weak profile, and personal network. Demonstrate why signal strength alone is not identity. Remediate certificate validation/MDM profile and require failed association to the rogue fixture.
+
 ---
 > 🔼 Up: [[Wireless & Physical Penetration Testing]]
+
+## Core Concept
+
+**Rogue Access Points & Wireless Trust** is the atomic learning objective of this note. Identify its trust boundary, prerequisites, attacker-controlled input or state, vulnerable transformation, violated security invariant, minimum evidence, business consequence, and safe stopping point. The mechanism must remain explainable without depending on a specific product.
+
+## Visual Attack Flow
+
+```mermaid
+flowchart LR
+    A["Scoped prerequisite"] --> B["Rogue Access Points & Wireless Trust mechanics"]
+    B --> C["Trust boundary crossed"]
+    C --> D["Bounded canary proof"]
+    D --> E["Detection, remediation & retest"]
+```
+
+## Practical Payloads & Execution
+
+```text
+exercise=Rogue Access Points & Wireless Trust
+cohort=privacy-approved canary group
+maximum_action=harmless marker
+real_credentials_collected=false
+```
+
+### Expected output
+
+```text
+prevented_or_reported=true
+participant_harm=none
+control_owner=identified
+```
+
+Treat the output as proof of only the stated condition. Repeat with a negative control, preserve timestamps and the affected build, and never expand impact merely because another path appears reachable.
+
+## Real-World Scenario
+
+A privacy-approved enterprise exercise applies **Rogue Access Points & Wireless Trust** with synthetic identities and a harmless canary action. Legal, HR, privacy, and the white team define prohibited themes and stop conditions; results measure process and control performance rather than individuals.
+
+The durable remediation belongs at the authoritative enforcement layer. Retest the original condition and meaningful variants while verifying legitimate workflows still function.

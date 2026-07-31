@@ -54,5 +54,69 @@ remote_audit=present fixture_restored=true marker_detected_by_siem=true
 
 The exercise succeeds only if endpoint monitoring records process and file activity, remote logging preserves original events, the SIEM detects the marker/tamper sequence, and recovery restores a trusted state. The tool’s value is measurable defense validation, not disappearance.
 
+## Threat model
+
+Assume malformed paths, symlink races, mount changes, compromised local administrators, forged approval tokens, interrupted actions, partial rollback, and unavailable remote audit. ShadowStep must never claim it can defeat immutable logging, storage snapshots, forensic acquisition, or hardware behavior.
+
+```mermaid
+flowchart TD
+    U["Operator request"] --> A["Identity & approval"]
+    A --> S["Scope policy"]
+    S --> P["Canonical path & host checks"]
+    P --> D["Dry-run diff"]
+    D --> X{"Destructive?"}
+    X -->|"No"| E["Execute simulation"]
+    X -->|"Yes"| T["Second short-lived token"]
+    T --> E
+    E --> V["Verify & rollback"]
+    V --> R["Remote immutable record"]
+```
+
+## Module contracts
+
+Every module implements `plan`, `precheck`, `execute`, `verify`, and `rollback`. Plans list resolved targets, expected changes, risk, privileges, evidence, and rollback. Execution receives open file descriptors or validated objects rather than re-resolving attacker-controlled strings.
+
+### Log manipulation simulator
+
+Operate on generated fixtures by default. Preserve original hash, parse format, apply marker-specific transformations, write atomically, verify parser readability, emit remote audit, then restore. Binary accounting databases require format-aware fixture handlers—not truncation.
+
+### Data shredding simulator
+
+Teach the difference between logical overwrite and assured destruction. On SSD, copy-on-write, snapshots, journaling, RAID, cloud volumes, and remote backup, overwriting a pathname cannot prove physical erasure. Enterprise destruction relies on cryptographic erasure, lifecycle controls, and media destruction policies.
+
+### Network identity masking simulator
+
+Use isolated namespaces/range interfaces and reversible settings. A test can change a lab MAC, hostname, or egress route while remote sensors preserve attribution. Refuse production management interfaces and verify connectivity before/after rollback.
+
+## Policy example
+
+```yaml
+environment: disposable-range
+allowed_hosts: [range-ubuntu-04]
+allowed_roots: [/srv/shadowstep-fixtures]
+deny_mount_types: [nfs, cifs, fuse, overlay]
+remote_audit_required: true
+destructive_approval_ttl_seconds: 120
+max_file_bytes: 10485760
+rollback_required: true
+```
+
+## Incident-response training scenario
+
+```shell-session
+responder@range:~$ shadowstep plan --profile ir-lab.yaml --scenario indicator-removal
+actions=4 fixtures=3 remote_audit=reachable rollback=ready status=SAFE
+responder@range:~$ shadowstep run --plan plan-7f2.json --approval-token REDACTED
+START audit=ss-7f2 module=logs target=/srv/shadowstep-fixtures/auth.log
+VERIFY local_marker_removed=true remote_original_present=true siem_alert=IR-2044
+ROLLBACK hash_restored=true parser_check=passed
+```
+
+The blue team should detect file replacement/truncation, process access to audit artifacts, identity changes, remote-log continuity differences, and attempted deletion. The exercise fails if remote audit is absent or rollback is unverified.
+
+## Testing & release
+
+Property-test path containment, fuzz parsers, simulate power loss between every state transition, test symlink swaps, verify atomic writes, and run only in disposable integration images. Release with signed packages, SBOM, documented platform limits, and conspicuous safety defaults. Telemetry bypass is not a feature.
+
 ---
 > 🔼 Up: [[Writing Your Own Tools]]

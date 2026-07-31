@@ -1,5 +1,5 @@
 ---
-title: "LNX.2 CLI Ninja & Core Commands"
+title: "Linux CLI & Core Commands"
 aliases: ["Core Commands", "Linux Commands", "CLI Ninja", "Bash Commands", "Command Reference"]
 tags:
   - tree/os
@@ -11,10 +11,21 @@ Domain:
 Color: "#FFA500"
 ---
 
-# ⌨️ LNX.2 · CLI Ninja & Core Commands
+# ⌨️ Linux CLI & Core Commands
 
 > [!abstract] Master Note of [[Linux]]
-> The command line is where a hacker *lives*. This is the **complete arsenal** — every command you need, grouped by job, with real invocations. Skim it as a reference; drill the ⭐ **starred** commands until they're muscle memory. The heavily-used families get their own deep dives elsewhere in this tree (piping, permissions, networking, privesc).
+> A complete command-line reference grouped by operational purpose, with examples, output, failure modes, and security context. Drill the starred commands until they become muscle memory.
+
+## Parent Learning Order
+Linux Introduction & Distributions -> Linux CLI & Core Commands -> Linux I-O Redirection & Piping -> Linux File System Hierarchy & Editors -> Linux Boot Process & systemd -> Linux Permissions & Process Management -> Linux Memory & Storage Internals -> Linux Networking, Transfers & Curl -> Linux Security Controls & Hardening -> Linux Observability, Logging & Forensics -> Linux Advanced Mechanics & Privilege Escalation -> Linux Kernel Internals -> Linux Documentation & Note-Taking
+
+## Start from zero — terminal, shell, command & session
+
+A **terminal** is the text interface carrying your keystrokes and displaying program output. A terminal emulator is an application that provides that interface in a graphical desktop. A **shell**—commonly Bash—runs inside the terminal, parses the line you type, performs expansions and redirections, and launches programs. A **command** may be a shell builtin, function, alias, script, or executable file. A **session** is the environment around that shell: identity, current directory, variables, terminal device, job table, and resource limits.
+
+The prompt is not part of the command. In examples, `$` means an unprivileged prompt and `#` means a root prompt; type only what follows it. Linux is case-sensitive: `Report.txt` and `report.txt` are different names. A command normally reports success with exit status `0` and failure with a nonzero value. Read output before copying the next command, and inspect `echo $?` when correctness matters.
+
+Begin in a disposable account or VM. Practice with a directory created by `mktemp -d`, use absolute paths when ambiguity would be dangerous, and do not prefix commands with `sudo` merely to make errors disappear. The objective is not memorizing a dictionary: it is learning to predict which identity, path, input, output, and system object a command will affect.
 
 ## Anatomy of a command
 ```
@@ -26,6 +37,16 @@ Color: "#FFA500"
     └────────────────────────────── run it as root
 ```
 Short flags combine (`ls -l -a` → `ls -la`); long flags are `--all`. The shell splits on spaces, so **quote** anything with spaces: `cat "my file.txt"`.
+
+```mermaid
+flowchart LR
+    K["Keyboard or script"] --> SH["Shell: parse, expand, redirect"]
+    SH --> B{"Builtin?"}
+    B -- yes --> S["Execute inside current shell"]
+    B -- no --> P["Resolve PATH & execve program"]
+    P --> KRN["Kernel syscalls"] --> O["stdout, stderr & exit status"]
+    S --> O
+```
 
 ## 1 · Orientation & identity
 | Command | Does |
@@ -267,7 +288,7 @@ Mnemonic for `tar`: **c**reate e**x**tra **v**erbose **f**iles **z**ipped → `-
 | `info cmd` | GNU hypertext docs |
 | `help` (builtins) | help for shell builtins like `cd`, `export` |
 
-## 19 · Binary & analysis utilities (bonus for CTFs)
+## 19 · Binary inspection & analysis utilities
 | Command | Does |
 | --- | --- |
 | `strings` · `file` · `xxd` | strings / type / hex of a binary |
@@ -288,6 +309,56 @@ Mnemonic for `tar`: **c**reate e**x**tra **v**erbose **f**iles **z**ipped → `-
 | `Ctrl+C` / `Ctrl+Z` | kill / suspend the foreground command |
 | `Ctrl+A` / `Ctrl+E` | jump to start / end of line |
 | `Ctrl+L` | clear the screen |
+
+## Troubleshooting commands systematically
+
+Classify the failure before changing privileges. `command not found` means shell resolution failed: inspect `type -a`, `command -v`, `PATH`, spelling, and package presence. `Permission denied` may mean missing execute permission, an untraversable parent directory, a `noexec` mount, a policy denial, or an interpreter problem. `No such file or directory` can describe a missing script interpreter or dynamic loader even when the named executable exists. `Operation not permitted` often points to capabilities, seccomp, namespaces, immutable attributes, or mandatory access control rather than ordinary mode bits.
+
+Use a reproducible diagnostic envelope:
+
+```shell-session
+$ printf 'user=%s dir=%s shell=%s\n' "$(id -un)" "$PWD" "$SHELL"
+user=analyst dir=/srv/lab shell=/bin/bash
+$ type -a inventory; file "$(command -v inventory)"; inventory --version
+inventory is /usr/local/bin/inventory
+/usr/local/bin/inventory: ELF 64-bit LSB pie executable, x86-64
+inventory 2.4.1
+$ inventory --check; rc=$?; printf 'exit=%d\n' "$rc"
+configuration /etc/inventory.yml: line 18: unknown key "destinatoin"
+exit=78
+```
+
+Read the program's own diagnostics and exit status first, then consult `--help`, the relevant manual page, service logs, and `strace` only when the failing boundary remains unclear. Preserve the original command, quoting, environment, and working directory; changing several simultaneously destroys causality.
+
+## Hands-on lab — a 20-minute operator circuit
+
+Create a disposable directory with `mktemp -d`. Record identity and system data; create nested files; search by name, content, owner, mode, and modification time; archive the result; calculate a SHA-256 hash; start a local HTTP server; inspect its process, listener, open files, and journal; then terminate it with `SIGTERM`. Use `man`, `whatis`, `type`, `which`, and `--help` at least once rather than guessing flags.
+
+Expected output must demonstrate each state transition: the matched log line, a stable archive hash, the listener's owning PID, and a final non-running process. Compare values rather than expecting identical PIDs or hashes across machines.
+
+```shell-session
+$ lab=$(mktemp -d); cd "$lab"; mkdir -p input/output
+$ printf 'alpha\nerror:42\nbeta\n' > input/app.log
+$ grep -n error input/app.log | tee output/findings.txt
+2:error:42
+$ tar -czf evidence.tar.gz input output && sha256sum evidence.tar.gz
+51c4c7d4c0d7...  evidence.tar.gz
+$ python3 -m http.server 8000 >/tmp/linux-cli-lab.log 2>&1 & server=$!
+$ ss -lntp | grep :8000
+LISTEN 0 5 0.0.0.0:8000 0.0.0.0:* users:(("python3",pid=24118,fd=3))
+$ kill -TERM "$server"; wait "$server"; echo "status=$?"
+status=143
+```
+
+## Security implications
+
+Command fluency includes restraint. Quote variables, inspect paths before recursive operations, prefer package signatures, avoid secrets in arguments or history, validate downloads by hash/signature, and understand the privilege of every command. `sudo`, raw disk tools, firewall changes, ownership recursion, and force deletion can cross irreversible boundaries. Test destructive syntax against disposable paths and capture evidence before altering a system.
+
+### Crook → Operator → Root checkpoint
+
+- **Crook:** navigate, inspect, edit, search, archive, and request help without copying unknown commands blindly.
+- **Operator:** compose commands safely, interpret outputs and exit status, manage users/processes/services/networking, and preserve artifacts.
+- **Root:** select the smallest correct utility, predict shell expansion and kernel effects, automate repeatably, and recognize when a command crosses a security or recovery boundary.
 
 > [!tip] Crook → Root
 > **Crook** memorises a handful of commands. **Root** knows this whole map *exists*, reaches for the right tool instantly, composes them into one-liners (see **I/O Redirection & Piping**), and never types a full path when `Tab` and `Ctrl+R` will do it.

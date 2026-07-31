@@ -66,5 +66,45 @@ Agents must fail closed on stale tasks, clock skew beyond tolerance, unknown act
 
 The emulator should produce a published behavior catalog mapped to expected data sources and detections. Replaying a stable, transparent action makes defensive regression testing possible without hiding from the defenders being trained.
 
+## Component model
+
+Separate identity provider, operator API, policy engine, task signer, queue, agent, artifact store, and audit sink. No component should both authorize and erase its own evidence. Agents accept typed capabilities, not general shell commands.
+
+## Task lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> Draft
+    Draft --> Approved
+    Approved --> Signed
+    Signed --> Leased
+    Leased --> Running
+    Running --> Completed
+    Running --> Failed
+    Running --> Cancelled
+    Completed --> Cleaned
+    Failed --> Cleaned
+    Cancelled --> Cleaned
+    Cleaned --> [*]
+```
+
+Leases prevent two agents from executing one task. Nonces prevent replay. Expiry limits stale commands. Idempotency keys make retries safe. Every transition emits an immutable event.
+
+## Agent hardening
+
+Run as an unprivileged dedicated identity, sandbox action plugins, pin server trust, rotate workload certificates, cap CPU/memory/runtime/output, and keep the update mechanism signed and separate. Configuration must define lab identifiers and refuse unknown environments. Local spooling may bridge brief audit outages, but policy decides whether execution can continue; high-impact actions should fail closed.
+
+## API & data model
+
+Use authenticated requests with operator, approval, target, action schema, purpose, expiry, and cleanup. Results contain status, bounded structured output, artifact hashes, and verification—not arbitrary unbounded stdout.
+
+## Purple-team master lab
+
+Build an emulator with two benign actions: create/remove a canary file and generate an approved DNS marker. Demonstrate mutual TLS, RBAC, second approval, signed task, replay rejection, cancellation, audit outage behavior, remote telemetry, cleanup, and detection regression. Threat-model malicious operator, compromised agent, stolen queue token, and clock skew.
+
+## Governance
+
+Publish behavior catalog, expected data sources, change approvals, release signatures, emergency shutdown, retention, and exercise report. The architecture must make simulated behavior attributable and reviewable; concealment and security-control bypass are explicitly out of scope.
+
 ---
 > 🔼 Up: [[Writing Your Own Tools]]

@@ -13,33 +13,33 @@ Color: "#DC143C"
 # Network Penetration Testing
 
 > [!abstract] Lifecycle branch
-> External and internal infrastructure testing from attack-surface discovery through service analysis, vulnerability verification, privilege escalation, lateral movement, segmentation testing, and evidence-backed remediation.
+> External and internal infrastructure testing focused on network trust, exposed services, segmentation, remote access, and service-specific attack paths. Reconnaissance and vulnerability assessment have their own lifecycle branches.
 
 ```mermaid
 flowchart LR
-    A["Asset and trust map"] --> R["Recon and enumeration"]
-    R --> V["Vulnerability verification"]
-    V --> F["Controlled foothold"]
-    F --> E["Escalation and lateral movement"]
-    E --> I["Impact, cleanup, retest"]
+    A["Network trust map"] --> L["Layer 2 and 3 controls"]
+    L --> S["Service attack surfaces"]
+    S --> F["Controlled foothold"]
+    F --> G["Segmentation validation"]
+    G --> I["Impact, cleanup, retest"]
 ```
 
-## Master notes
+## 🗺️ Zero-to-Mastery Learning Path
 
-- [[Passive Reconnaissance & OSINT]]
-- [[Active Reconnaissance & Port Scanning]]
-- [[Service Enumeration]]
-- [[Vulnerability Scanning & Automation]]
-- [[Manual Vulnerability Verification]]
-- [[External Network Pentesting]]
-- [[Internal Network Pentesting]]
-- [[Privilege Escalation & Living off the Land]]
+1. [[External Network Pentesting]]
+2. [[Internal Network Pentesting]]
+3. [[Service Enumeration]]
+4. [[Layer 2 Network Attacks]]
+5. [[Layer 3 Network Attacks]]
+6. [[Enterprise Service Exploitation]]
+7. [[Network Segmentation Testing]]
+8. [[Remote Access Security Testing]]
 
 ## Typical evidence flow
 
 ```text
-Asset register → service matrix → verified weaknesses → controlled proof
-              → trust-path map → remediation owners → targeted retest
+Trust map → service matrix → controlled proof → segmentation path
+          → business impact → remediation owners → targeted retest
 ```
 
 ---

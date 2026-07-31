@@ -3,6 +3,7 @@ title: Methodologies & Frameworks
 aliases:
   - Pentest Methodologies
   - Security Testing Frameworks
+  - Penetration Testing Frameworks
 tags:
   - tree/offensive
   - cyber/moc
@@ -23,13 +24,19 @@ flowchart TD
     E --> R["Report, remediation, retest"]
 ```
 
-## Master notes
+## 🗺️ Zero-to-Mastery Learning Path
 
-- [[Penetration Testing Fundamentals]]
-- [[Penetration Testing Frameworks]]
-- [[MITRE ATT&CK & Threat Models]]
-- [[Cyber Kill Chain]]
-- [[Rules of Engagement & Scoping]]
+1. [[Penetration Testing Fundamentals]]
+2. [[Statements of Work & Evidence Governance]]
+3. [[Rules of Engagement & Scoping]]
+4. [[PTES]]
+5. [[NIST SP 800-115]]
+6. [[OWASP Web Security Testing Guide]]
+7. [[OSSTMM]]
+8. [[CREST Penetration Testing Methodology]]
+9. [[Cyber Kill Chain]]
+10. [[MITRE ATT&CK]]
+11. [[Threat Modeling for Offensive Operations]]
 
 ## Practical artifact
 

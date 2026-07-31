@@ -83,5 +83,50 @@ engineer@lab:~$ bash -n normalize.sh
 
 No output means both checks passed.
 
+## Expansion order & injection hazards
+
+Bash performs parameter, command, arithmetic, and pathname expansion plus word splitting. Quoting controls several phases. Data must never become shell syntax through `eval`, `bash -c "$untrusted"`, or concatenated commands. Use arrays:
+
+```bash
+cmd=(curl --fail --silent --show-error --max-time 5)
+cmd+=(--header 'X-C2R-Test: authorized')
+cmd+=(-- "$url")
+"${cmd[@]}"
+```
+
+Each array element remains one argument even with spaces or glob characters.
+
+## File-safe loops & null delimiters
+
+```bash
+find evidence -type f -print0 |
+  while IFS= read -r -d '' path; do
+    sha256sum -- "$path"
+  done
+```
+
+Newline-delimited filenames are ambiguous. Use NUL-capable tools for arbitrary paths. Avoid parsing `ls`; use globs or `find`.
+
+## Error handling & observability
+
+`set -e` has exceptions in conditionals, pipelines, subshells, and command substitutions. Check expected failures explicitly. An `ERR` trap can log line/command/status, but redact arguments. Separate human diagnostics on stderr from machine results on stdout. Preserve child exit codes.
+
+## Crook2Root master project
+
+Build an evidence-bundling script that validates an engagement directory, rejects symlinks/out-of-root paths, creates a temporary manifest, hashes files with NUL-safe traversal, redacts named metadata, builds an archive atomically, verifies it, records tool versions, and cleans up on signals. Test spaces, newlines, leading dashes, permission failures, disk full, interrupt, and concurrent modification.
+
+```shell-session
+engineer@lab:~$ bats test/evidence_bundle.bats
+ ✓ rejects output outside approved root
+ ✓ handles newline in filename
+ ✓ removes temporary files on SIGTERM
+ ✓ produces reproducible manifest
+4 tests, 0 failures
+```
+
+## When to stop using Bash
+
+Move to Python, Go, or C++ when parsing nested data, maintaining complex state, handling untrusted binary formats, requiring portable concurrency, or needing robust unit-testable abstractions. Bash should orchestrate strong tools, not reimplement them poorly.
+
 ---
 > 🔼 Up: [[Programming for Security]]

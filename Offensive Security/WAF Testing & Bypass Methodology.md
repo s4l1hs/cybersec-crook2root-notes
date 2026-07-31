@@ -6,7 +6,7 @@ tags:
   - cyber/offensive/web
   - type/methodology
   - level/root
-Domain: "[[Web Application Penetration Testing]]"
+Domain: "[[HTTP Architecture & Advanced Web Attacks]]"
 Color: "#DC143C"
 ---
 
@@ -115,5 +115,80 @@ No real data accessed; test state removed
 - Keep protocol policies aligned and regression-tested.
 - Correlate edge and origin request IDs.
 
+## Normalization differential matrix
+
+Test one transformation at a time across browser, edge, gateway, framework, and application:
+
+| Dimension | Controlled variants |
+|---|---|
+| Path | duplicate slash, dot segment, percent encoding, case |
+| Query | duplicate key, empty value, separator, encoding |
+| Body | form, JSON, XML, multipart, charset |
+| Headers | duplicates, case, whitespace, forwarding headers |
+| Method | GET/POST equivalents, override headers where supported |
+| Protocol | HTTP/1.1 vs HTTP/2 behavior through approved clients |
+
+Capture edge request ID, origin request ID, response status/length/title, latency, cache status, and backend side effect. A difference is a hypothesis until origin behavior is proven.
+
+## Safe bypass proof
+
+Use a non-destructive canary that the origin recognizes but the WAF policy is expected to block. The proof is not “a payload got through”; it is that semantically equivalent requests receive inconsistent enforcement and reach the same controlled sink.
+
+```text
+Control: canonical request -> blocked at edge, origin marker absent
+Variant: alternate encoding -> 200, origin marker present
+Impact: normalization mismatch permits prohibited input class
+Cleanup: no persistent state; canary logs retained
+```
+
+## Defense validation
+
+Recommend canonicalization at one trusted boundary, consistent parser chains, schema validation, positive security controls, virtual patch testing, and origin-side secure coding. WAF tuning must include regression fixtures for canonical and bypass variants, false-positive traffic, performance, and logging.
+
+## Mastery lab
+
+Place a test application behind two differently configured proxies. Build a normalization matrix, predict parsing at each layer, capture both sides, explain three differentials, fix configuration/application validation, and retest all variants. Include cache and request-ID correlation.
+
 ---
-> 🔼 Up: [[Web Application Penetration Testing]]
+> 🔼 Up: [[HTTP Architecture & Advanced Web Attacks]]
+
+## Core Concept
+
+**WAF Testing & Bypass Methodology** is the atomic learning objective of this note. Identify its trust boundary, prerequisites, attacker-controlled input or state, vulnerable transformation, violated security invariant, minimum evidence, business consequence, and safe stopping point. The mechanism must remain explainable without depending on a specific product.
+
+## Visual Attack Flow
+
+```mermaid
+flowchart LR
+    A["Scoped prerequisite"] --> B["WAF Testing & Bypass Methodology mechanics"]
+    B --> C["Trust boundary crossed"]
+    C --> D["Bounded canary proof"]
+    D --> E["Detection, remediation & retest"]
+```
+
+## Practical Payloads & Execution
+
+```http
+POST /c2r-lab/waf-testing-bypass-methodology HTTP/1.1
+Host: app.example.test
+Authorization: Bearer <CANARY_IDENTITY>
+Content-Type: application/json
+
+{"object":"C2R-CANARY","test":true}
+```
+
+### Expected output
+
+```text
+HTTP/1.1 200 OK
+X-C2R-Result: vulnerable-condition-observed
+{"marker":"C2R-CANARY-PROOF"}
+```
+
+Treat the output as proof of only the stated condition. Repeat with a negative control, preserve timestamps and the affected build, and never expand impact merely because another path appears reachable.
+
+## Real-World Scenario
+
+A multi-tenant enterprise service exposes a scoped **WAF Testing & Bypass Methodology** condition to a synthetic customer account. The assessor proves one trust-boundary failure with a canary object, correlates application and identity telemetry, removes test state, and assigns the authoritative server-side control.
+
+The durable remediation belongs at the authoritative enforcement layer. Retest the original condition and meaningful variants while verifying legitimate workflows still function.

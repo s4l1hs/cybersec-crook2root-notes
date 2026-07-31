@@ -1,5 +1,5 @@
 ---
-title: "LNX.7 Advanced Mechanics & PrivEsc"
+title: "Linux Advanced Mechanics & Privilege Escalation"
 aliases: ["PATH Abuse", "Cronjobs", "Crontab", "SUID", "SGID", "euid", "Linux Privilege Escalation"]
 tags:
   - tree/os
@@ -12,13 +12,24 @@ Domain:
 Color: "#FFA500"
 ---
 
-# 👑 LNX.7 · Advanced Mechanics & PrivEsc
+# 👑 Linux Advanced Mechanics & Privilege Escalation
 
 > [!abstract] Master Note of [[Linux]]
 > This is where a low-privilege shell becomes **root**. Four classic mechanisms — the **`$PATH`** variable, **cron** jobs, **SUID/SGID** binaries, and **`sudo`** rights — are convenience features that turn into escalation paths when misconfigured. Understanding them makes you both the attacker who finds them and the admin who closes them.
 
 > [!warning] Authorized Simulation / Defensive Testing only
 > Every technique below is for **systems you own or are authorized to test** (CTFs, labs, sanctioned engagements). They are documented so you can **find and fix** the misconfiguration. Each ends with the hardening that defeats it.
+
+## Parent Learning Order
+Linux Introduction & Distributions -> Linux CLI & Core Commands -> Linux I-O Redirection & Piping -> Linux File System Hierarchy & Editors -> Linux Boot Process & systemd -> Linux Permissions & Process Management -> Linux Memory & Storage Internals -> Linux Networking, Transfers & Curl -> Linux Security Controls & Hardening -> Linux Observability, Logging & Forensics -> Linux Advanced Mechanics & Privilege Escalation -> Linux Kernel Internals -> Linux Documentation & Note-Taking
+
+## Start from zero — privilege boundaries & trust paths
+
+**Privilege** is authority to perform an operation. **Privilege escalation** occurs when a subject gains authority beyond its intended role by crossing a flawed trust boundary. On Linux, the boundary may involve user IDs, groups, capabilities, SUID execution, `sudo`, service managers, scheduled tasks, writable configuration, namespaces, or the kernel. The vulnerability is rarely “a command”; it is a trusted higher-privilege component consuming something a lower-privilege subject can influence.
+
+Separate enumeration, hypothesis, validation, impact, and remediation. **Enumeration** collects facts without assuming exploitability. A **trust path** names the lower-privilege-controlled object, the privileged consumer, the trigger, and the resulting authority. **Validation** proves the path with an approved, reversible canary. A finding is incomplete until ownership, preconditions, reproducibility, evidence, cleanup, and the control that should break the path are documented.
+
+Prerequisites are permissions, processes, shell resolution, systemd, cron, and effective identity. Work only in a disposable lab or explicitly authorized scope. Never substitute destructive payloads for proof. Begin every exercise with `id`, scope confirmation, and a rollback plan; finish with evidence that the canary is removed and the corrected control prevents recurrence.
 
 ## First: enumerate (the first 5 minutes on a foothold)
 ```shell-session
@@ -113,12 +124,110 @@ $ sudo awk 'BEGIN{system("/bin/sh")}'         # awk one-liner
 ```
 Any `sudo`-able program that can **shell out** (`vim`,`less`,`find`,`awk`,`python`,`tar`,`nmap`) is an escalation. Also check for old **`sudo` CVEs** (e.g. Baron Samedit) via `sudo --version`. **Hardening:** never `NOPASSWD` shell-escape binaries; keep `sudo` patched; drop `env_keep` for `LD_PRELOAD`/`LD_LIBRARY_PATH`.
 
-## Blue-team: close every door above
+## Hardening: close every door above
 - **Baseline & diff** SUID/SGID: `find / -perm -4000 -type f 2>/dev/null | sort > baseline.txt`, alert on changes.
 - **Strip** needless SUID (`chmod u-s`); prefer narrow **capabilities** over blanket SUID.
 - **Mount** user-writable filesystems (`/tmp`,`/home`, removable) **`nosuid`** so SUID bits there are ignored.
 - **Absolute paths** in every privileged script; **`chmod 700`** cron/root scripts.
 - **Monitor** with `auditd` for execs of abusable binaries by unexpected users → feeds centralised logging.
+
+## Identity transitions at the syscall boundary
+
+Linux tracks real, effective, saved-set, and filesystem user IDs. The real UID records the invoking identity; the effective UID normally drives access checks; the saved-set UID permits a carefully designed privileged program to drop and later regain its original effective identity. SUID changes credentials during `execve`, subject to mount options, tracing state, `no_new_privs`, and security policy. Shells may deliberately drop privilege unless invoked in a preserve-privilege mode, which is why identical-looking SUID experiments can behave differently.
+
+Capabilities split traditional root authority into bits carried by process sets: permitted, effective, inheritable, bounding, and ambient. File capabilities can populate these sets at execution. `CAP_SETUID` enables identity changes; `CAP_DAC_READ_SEARCH` bypasses many read/search checks; `CAP_SYS_PTRACE` enables powerful process inspection; `CAP_SYS_ADMIN` covers so many operations that it is effectively near-root. User namespaces complicate the picture because a process may be UID 0 inside a namespace yet map to an unprivileged host UID.
+
+```mermaid
+flowchart TD
+    L["Low-privilege foothold"] --> E["Enumerate credentials, mounts, sudo, schedules, capabilities"]
+    E --> T{"Trust boundary misconfigured?"}
+    T -->|PATH or writable script| X["Privileged task executes attacker-controlled content"]
+    T -->|SUID/SGID| S["execve changes effective identity"]
+    T -->|file capability| C["execve grants narrow kernel privilege"]
+    T -->|sudo rule| U["Policy authorizes privileged program"]
+    X --> V["Validate identity with id; collect minimal proof"]
+    S --> V
+    C --> V
+    U --> V
+    V --> R["Report, remove artifact & restore state"]
+```
+
+## A disciplined authorized assessment workflow
+
+Privilege escalation is a hypothesis-driven review of trust transitions, not random payload execution. Begin with identity and context: `id`, groups, namespace mappings, capability sets, mount flags, and mandatory-access policy. Enumerate policy-controlled paths next: `sudo -l`, systemd unit definitions, timers, cron tables, executable search paths, SUID/SGID inventory, file capabilities, writable service configuration, and root-owned processes that consume user-writable data.
+
+Validate each candidate with the smallest reversible proof. For a writable root-run script, a timestamped canary file owned by root proves code execution without creating an interactive shell. For PATH resolution, a harmless wrapper that records `id` and exits demonstrates the flaw. For an overbroad capability, show the protected operation and stop. Maintain a command log and cleanup list.
+
+```shell-session
+$ id; cat /proc/self/uid_map; grep -E 'NoNewPrivs|Cap(Prm|Eff|Bnd)' /proc/self/status
+uid=1001(analyst) gid=1001(analyst) groups=1001(analyst),998(docker)
+         0          0 4294967295
+NoNewPrivs: 0
+CapPrm: 0000000000000000
+CapEff: 0000000000000000
+CapBnd: 000001ffffffffff
+$ findmnt -no TARGET,OPTIONS /tmp
+/tmp rw,nosuid,nodev,noexec,relatime
+```
+
+Systemd timers must be reviewed alongside cron. `systemctl list-timers --all`, `systemctl cat UNIT`, and `systemctl show UNIT -p User -p Group -p Environment -p ExecStart` reveal who runs what and with which environment. Writable unit files, drop-ins, environment files, or executables can cross privilege boundaries after reload/restart. Do not modify service definitions outside explicit authorization.
+
+Sudo policy evaluation includes command path, arguments where configured, run-as identity, host, tags, environment handling, and included files. A permitted interpreter, editor, pager, package manager, or program that loads plugins may expose a secondary execution path. The root cause is excessive functional authority, not the particular escape string. Remediation should authorize a purpose-built wrapper with fixed arguments and a minimal environment.
+
+## Common false positives & blockers
+
+- A SUID file on a `nosuid` mount does not gain identity.
+- A script's SUID bit is ignored on Linux; the interpreter's behavior and execution path matter instead.
+- A capability outside the namespace's bounding set may be unusable.
+- `no_new_privs` prevents `execve` from gaining privilege through SUID or file capabilities.
+- A writable file is not exploitable unless a privileged principal consumes it in an unsafe way.
+- A cron wildcard is dangerous only when option-like filenames reach a command whose parser treats them as options.
+- Containers may display UID 0 while lacking host mappings, capabilities, devices, or writable host paths.
+
+## Troubleshooting false positives & blocked trust paths
+
+An interesting permission is not automatically exploitable. Reconstruct the complete execution path: which privileged principal consumes the object, what trigger reaches it, which environment and working directory apply, whether arguments are fixed, which mount and LSM controls intervene, and whether the result crosses a meaningful authority boundary. Use `namei -l`, `getfacl`, `getcap`, `sudo -l`, `systemctl cat/show`, scheduler definitions, and process credentials to prove each edge.
+
+Common false positives include an SUID binary that permanently drops privilege before processing controllable data, a writable directory excluded from the privileged process's `PATH`, a cron file that is never loaded, a `sudo` rule constrained by safe arguments, a capability neutralized by `no_new_privs`, or a container root identity mapped to an unprivileged host range. Record the blocker as a control, not as a failed payload.
+
+```shell-session
+$ namei -l /opt/backup/bin/archive
+f: /opt/backup/bin/archive
+drwxr-xr-x root root /
+drwxr-xr-x root root opt
+drwxr-x--- root backup backup
+drwxr-xr-x root root bin
+-rwxr-xr-x root root archive
+$ sudo -l
+(root) /opt/backup/bin/archive --verify /srv/incoming/*.manifest
+```
+
+The wildcard, called binary, and input parser require analysis, but no write edge is yet proven. Validate with a benign canary under the Rules of Engagement, capture effective identity and logs, remove the canary, apply the narrow remediation, and demonstrate that the same precondition no longer crosses the boundary.
+
+## Hands-on lab — prove & remediate four trust failures
+
+Build disposable lab services rather than altering the host. Create: a root-owned scheduled script that calls a bare command with a controlled PATH; a SUID demonstration program that prints real/effective IDs; a copied interpreter with a narrow test capability; and a sudo rule for a wrapper that initially accepts arbitrary arguments. For each, document prerequisite, minimal canary proof, expected identity, cleanup, and least-privilege fix. Repeat after remediation and show the proof fails.
+
+Expected canary evidence:
+
+```text
+$ stat -c '%U:%G %A %n' /run/privesc-lab/proof
+root:root -rw-r--r-- /run/privesc-lab/proof
+$ cat /run/privesc-lab/proof
+authorized-lab uid=0 euid=0 source=path-resolution
+$ findmnt -no OPTIONS /run/privesc-lab
+rw,nosuid,nodev,noexec,relatime
+```
+
+## Security implications
+
+Most local escalation is legitimate functionality crossing an unintended trust boundary: a scheduler trusts writable content, policy delegates a general interpreter, a binary preserves excess identity, or a capability grants more kernel authority than the service needs. Reliable assessment identifies the exact consumer and credential transition. Reliable remediation removes that transition, constrains environment and arguments, applies `nosuid`/`noexec` where appropriate, narrows capabilities, and verifies the fix with the original minimal proof.
+
+### Crook → Operator → Root checkpoint
+
+- **Crook:** enumerate sudo, SUID/SGID, capabilities, PATH, cron, timers, and writable privileged inputs.
+- **Operator:** explain real/effective/saved IDs and capability sets, eliminate false positives, and produce a reversible canary proof.
+- **Root:** model namespace and `execve` credential transitions, chain only authorized conditions, remediate the underlying trust boundary, and verify that privilege can no longer be gained.
 
 ---
 > 🔼 Up: [[Linux]]

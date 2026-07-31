@@ -21,13 +21,22 @@ flowchart LR
     D --> V["Verify"]
     V --> E["Demonstrate impact"]
     E --> C["Clean up"]
-    C --> R["Report and retest"]
+    C --> R["Report & retest"]
 ```
 
-## Master walkthroughs
+## 🗺️ Zero-to-Mastery Learning Path
 
-- [[Guided Internal Pentest Walkthrough]]
-- [[Guided Web App Walkthrough]]
+1. [[Guided External Pentest Walkthrough]]
+2. [[Guided Internal Pentest Walkthrough]]
+3. [[Guided Active Directory Assessment]]
+4. [[Guided Web App Walkthrough]]
+5. [[Guided API Assessment]]
+6. [[Guided Wireless Assessment]]
+7. [[Guided Social Engineering Exercise]]
+8. [[Guided Cloud Security Assessment]]
+9. [[Guided Red Team Operation]]
+10. [[Guided Purple Team Validation]]
+11. [[Guided Retest & Closure]]
 
 ## Engagement directory example
 

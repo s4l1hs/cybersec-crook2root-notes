@@ -76,5 +76,38 @@ analyst@sensor:~$ sha256sum incident-20260730-102000.pcap
 
 Check kernel drops at capture end. A small snap length can omit payload and headers; `-s 0` captures full packets but increases sensitive-data volume. Use `-nn` to avoid DNS/service-name ambiguity. Store original captures immutably and analyze copies.
 
+## BPF mastery
+
+BPF filters bytes before full application dissection. Qualifiers reduce ambiguity:
+
+```bash
+'tcp[tcpflags] & (tcp-syn|tcp-ack) == tcp-syn' # initial SYN
+'ip[6:2] & 0x1fff != 0'                        # later IPv4 fragments
+'icmp[0] == 3 and icmp[1] == 3'               # port unreachable
+'udp dst port 53'                              # DNS requests
+```
+
+Byte offsets are sensitive to IP options, IPv6 extension headers, VLAN encapsulation, and link type. Validate them with known packets; prefer readable primitives when possible.
+
+## Remote capture architecture
+
+Use rotation and local safeguards, or stream a narrowly filtered pcap to an approved analysis host while preserving stderr separately.
+
+```shell-session
+analyst@workstation:~$ ssh sensor.example.test "sudo tcpdump -U -ni eth0 -w - 'host 192.0.2.10 and port 443'" > case-443.pcap
+tcpdump: listening on eth0, link-type EN10MB
+^C
+analyst@workstation:~$ capinfos case-443.pcap | rg 'packets|duration|encapsulation' -i
+File encapsulation: Ethernet
+Number of packets: 428
+Capture duration: 9.204 seconds
+```
+
+## Mastery lab
+
+Create filters for ARP, DHCP, DNS, one TCP service, initial SYNs, and ICMP errors. Capture with full snap length and then 96 bytes; explain what capability is lost. Force ring rotation and verify file count, ownership, free-space behavior, packet drops, and hashes.
+
+Increase capture buffers only after measuring drops. Disable terminal decoding by writing pcap. Place filters in kernel, reduce snap length only with a documented purpose, and compare interface counters, tcpdump counters, and switch-mirror statistics.
+
 ---
 > 🔼 Up: [[Packet Analysis Tools]]

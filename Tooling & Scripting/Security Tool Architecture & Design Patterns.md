@@ -69,5 +69,37 @@ flowchart TD
     I --> B["SBOM, signed binary, checksums"]
 ```
 
+## Domain model & boundaries
+
+Represent targets, credentials, observations, findings, artifacts, and run metadata as distinct types. An observation is what a sensor saw; a finding is an analyst-supported risk claim. Keeping them separate prevents a banner match from silently becoming “critical vulnerability.”
+
+Use ports/adapters for time, filesystem, network, credential provider, and evidence sink. The core engine should run against fakes without network or disk. Privileged packet capture or host inspection belongs in a minimal helper process with a narrow protocol.
+
+## Resilience patterns
+
+- Idempotency keys prevent repeated side effects after retries.
+- Exponential backoff with jitter protects dependencies, but bounded total runtime prevents endless retry.
+- Bulkheads isolate one target/protocol pool from exhausting all workers.
+- Circuit breakers stop requests after repeated systemic failure.
+- Checkpoints permit resume from immutable plans without repeating completed operations.
+- Atomic output plus append-only journals preserves partial runs.
+
+## Configuration precedence
+
+Document precedence such as defaults → config file → environment → CLI. Secrets should come from a credential provider, never diagnostic dumps. Print an effective redacted configuration before contact.
+
+```shell-session
+operator@lab:~$ secprobe config show --effective --redact
+scope=[192.0.2.0/28] exclusions=[192.0.2.7/32] rate=20/s workers=8 token=<redacted>
+```
+
+## Observability
+
+Emit structured logs, metrics, traces, and immutable evidence with one run ID. Minimum metrics include planned/completed/failed operations, in-flight workers, rate-limiter wait, latency, retries, bytes, parser failures, and output errors. Avoid high-cardinality target labels in central metrics.
+
+## Crook2Root engineering project
+
+Build a safe HTTP-header auditor with target allowlist, exclusions, DNS revalidation, TLS verification, bounded concurrency, JSONL results, redaction, dry run, cancellation, retries, tests, SBOM, and signed release. Threat-model malicious responses and demonstrate parser fuzzing. A second operator must reconstruct every result from the manifest and evidence.
+
 ---
 > 🔼 Up: [[Writing Your Own Tools]]

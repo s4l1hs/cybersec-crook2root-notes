@@ -126,6 +126,8 @@ Crook2Root is designed to grow with the community. The four newest domains — *
 3. **No lateral links between master notes** — reference other topics in **bold**, not `[[wikilinks]]`.
 4. Keep it *crook2root*: start from zero, end at mastery, show real commands.
 
+Read the complete [Contribution Guide](CONTRIBUTION.md) and [Crook2Root Authoring Standard](docs/Crook2Root%20Authoring%20Standard.md) before opening a pull request.
+
 ---
 
 <div align="center">

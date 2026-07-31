@@ -10,7 +10,7 @@ tags:
   - cyber/osint
   - type/methodology
   - level/crook
-Domain: "[[Network Penetration Testing]]"
+Domain: "[[Reconnaissance & Attack Surface]]"
 Color: "#DC143C"
 ---
 
@@ -170,4 +170,43 @@ A mature passive-recon phase produces:
 The root-level operator can explain why each candidate exists, how reliable it is, what harm could result from testing it, and which next action would answer the question with the least risk.
 
 ---
-> 🔼 Up: [[Network Penetration Testing]]
+> 🔼 Up: [[Reconnaissance & Attack Surface]]
+
+## Core Concept
+
+**Passive Reconnaissance & OSINT** is the atomic learning objective of this note. Identify its trust boundary, prerequisites, attacker-controlled input or state, vulnerable transformation, violated security invariant, minimum evidence, business consequence, and safe stopping point. The mechanism must remain explainable without depending on a specific product.
+
+## Visual Attack Flow
+
+```mermaid
+flowchart LR
+    A["Scoped prerequisite"] --> B["Passive Reconnaissance & OSINT mechanics"]
+    B --> C["Trust boundary crossed"]
+    C --> D["Bounded canary proof"]
+    D --> E["Detection, remediation & retest"]
+```
+
+## Practical Payloads & Execution
+
+```text
+target=198.51.100.20 or designated enterprise canary
+identity=assessment-user
+action=Passive Reconnaissance & OSINT
+rate_and_scope=approved
+```
+
+### Expected output
+
+```text
+observable_result=C2R_CANARY_PROOF
+unauthorized_targets=0
+evidence_timestamp=recorded
+```
+
+Treat the output as proof of only the stated condition. Repeat with a negative control, preserve timestamps and the affected build, and never expand impact merely because another path appears reachable.
+
+## Real-World Scenario
+
+A scoped enterprise infrastructure assessment applies **Passive Reconnaissance & OSINT** only to documentation-range addresses and designated canary services. Activity is rate-limited, ownership is verified, protocol evidence is captured, and broad exploitation is explicitly avoided.
+
+The durable remediation belongs at the authoritative enforcement layer. Retest the original condition and meaningful variants while verifying legitimate workflows still function.

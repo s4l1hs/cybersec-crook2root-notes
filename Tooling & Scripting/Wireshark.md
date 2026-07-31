@@ -80,5 +80,31 @@ Useful flags include `-i` interface, `-D` list interfaces, `-f` capture filter, 
 
 Keep the original pcapng read-only, analyze a copy, hash both, and record the filter/export command. Displayed protocol labels are dissector interpretations; verify critical claims against frame bytes and endpoint logs. Captures may contain credentials, personal data, and session tokens, so minimize collection and control access.
 
+## Protocol-analysis methodology
+
+Start broad with endpoints, conversations, protocol hierarchy, and I/O graphs. Form a hypothesis, narrow with a display filter, follow the relevant stream, inspect expert information, then return to raw frames. Never begin by searching for a dramatic string without first establishing capture boundaries and normal traffic.
+
+For TCP, examine handshake, negotiated options, sequence/acknowledgment behavior, window scaling, retransmissions, out-of-order packets, zero windows, resets, and teardown. Distinguish retransmission from capture loss. For DNS, correlate query ID, name, type, response code, answers, TTL, and retransmission. For TLS, inspect ClientHello/ServerHello, versions, cipher suites, SNI, ALPN, certificate chain, session resumption, and alerts.
+
+## Profiles, columns & decryption
+
+Create separate profiles for incident response, application troubleshooting, wireless, and malware analysis. Useful columns include `tcp.stream`, `tcp.analysis.flags`, `dns.qry.name`, `http.request.method`, `tls.handshake.extensions_server_name`, and `frame.time_delta_displayed`.
+
+TLS session-key logging can decrypt approved client traffic when supported. Protect key logs like credentials and verify decrypted application records. RSA private keys generally cannot decrypt modern forward-secret sessions. IPsec, Kerberos, and wireless decryption require protocol-specific keys and complete exchanges.
+
+## Mastery lab
+
+Capture a controlled DNS lookup and HTTPS request. Produce capture metadata, endpoint/conversation summary, DNS transaction explanation, TCP handshake/teardown sequence, TLS negotiation table, approved decrypted HTTP evidence, and a timeline joined to server logs.
+
+```shell-session
+analyst@lab:~$ capinfos evidence.pcapng | sed -n '1,8p'
+File type:           Wireshark/... - pcapng
+Number of packets:   184
+Capture duration:    2.481 seconds
+Data byte rate:      18 kBps
+```
+
+Wrong checksums often result from NIC offload. Missing one direction suggests SPAN/TAP asymmetry, routing, VLAN, or placement. An unrecognized protocol may require Decode As, a newer dissector, or confirmation that traffic is encrypted/proprietary.
+
 ---
 > 🔼 Up: [[Packet Analysis Tools]]

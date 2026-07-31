@@ -181,3 +181,42 @@ User activity monitoring helps detect suspicious behaviours; for example, you wo
 
 ---
 > 🔼 Up: [[Methodologies & Frameworks]]
+
+## Core Concept
+
+**Cyber Kill Chain** is the atomic learning objective of this note. Identify its trust boundary, prerequisites, attacker-controlled input or state, vulnerable transformation, violated security invariant, minimum evidence, business consequence, and safe stopping point. The mechanism must remain explainable without depending on a specific product.
+
+## Visual Attack Flow
+
+```mermaid
+flowchart LR
+    A["Scoped prerequisite"] --> B["Cyber Kill Chain mechanics"]
+    B --> C["Trust boundary crossed"]
+    C --> D["Bounded canary proof"]
+    D --> E["Detection, remediation & retest"]
+```
+
+## Practical Payloads & Execution
+
+```text
+engagement_action=Cyber Kill Chain
+asset=C2R-CANARY
+identity=authorized-test-principal
+impact_ceiling=single synthetic proof
+```
+
+### Expected output
+
+```text
+expected_output=C2R_CANARY_PROOF
+cleanup=verified
+retest_condition=recorded
+```
+
+Treat the output as proof of only the stated condition. Repeat with a negative control, preserve timestamps and the affected build, and never expand impact merely because another path appears reachable.
+
+## Real-World Scenario
+
+A regulated enterprise assessment applies **Cyber Kill Chain** to a canary asset. Scope, evidence provenance, decision points, control outcomes, cleanup, ownership, and retest criteria are recorded so another qualified operator can reproduce the conclusion.
+
+The durable remediation belongs at the authoritative enforcement layer. Retest the original condition and meaningful variants while verifying legitimate workflows still function.

@@ -23,11 +23,12 @@ flowchart TD
     D --> F["Facility and network remediation"]
 ```
 
-## Master notes
+## 🗺️ Zero-to-Mastery Learning Path
 
-- [[Wireless WPA2 & WPA3 Security Testing]]
-- [[Rogue Access Points & Wireless Trust]]
-- [[RFID & Physical Access Testing]]
+1. [[WPA2 Security Testing]]
+2. [[WPA3 Security Testing]]
+3. [[Rogue Access Points & Wireless Trust]]
+4. [[RFID & Physical Access Testing]]
 
 ## Safety envelope
 

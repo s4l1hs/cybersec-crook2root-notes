@@ -78,5 +78,39 @@ Conversion success does not prove field availability or query correctness. Run t
 
 Use stable IDs, meaningful titles, explicit logsource, references, false-positive guidance, severity, tags, and status lifecycle (`experimental`, `test`, `stable`, `deprecated`). Keep environmental allowlists outside core detection where possible. CI should validate YAML/schema, duplicate IDs, backend conversion, test corpora, and rule metadata. Track data-source prerequisites and expected event volume.
 
+## Detection semantics
+
+`logsource` describes category/product/service; a processing pipeline maps abstract fields into a concrete platform. Conversion cannot invent data that was never collected. Lists within one field commonly mean OR, while separate fields in one selection commonly mean AND—verify specification and converter behavior.
+
+Use multiple selections for behavior, narrow filters for known benign patterns, and explicit conditions. Anchor regular expressions and benchmark them. Keep environment allowlists separate from portable core logic when practical.
+
+## Test corpus
+
+Every rule needs canonical positives; case/path/quoting/parent variations; near-miss negatives; benign administration; missing-field cases; and expected conversions for supported backends.
+
+```text
+positive/canary-powershell-whoami.json
+positive/canary-pwsh-whoami.json
+negative/cmd-whoami.json
+negative/powershell-get-process.json
+negative/missing-parent-image.json
+```
+
+```mermaid
+flowchart LR
+    PR["Rule change"] --> S["Schema & style"]
+    S --> C["Backend conversion"]
+    C --> U["Unit corpus"]
+    U --> P["Performance & volume"]
+    P --> D["Canary deployment"]
+    D --> M["Metrics & promotion"]
+```
+
+Measure true positives, investigated false positives, alerts/day, distinct entities, query runtime, skipped runs, and data-source coverage. Suppressions need owner, reason, scope, and expiry.
+
+## Mastery lab
+
+Write one process rule and convert it to two backends. Compare generated fields, replay identical events, and explain differences. Remove a required field and prove coverage failure with a data-quality alert.
+
 ---
 > 🔼 Up: [[SIEM & Detection Engineering Tools]]

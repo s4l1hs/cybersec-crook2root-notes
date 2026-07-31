@@ -80,5 +80,32 @@ Cluster roles include manager, proxy, worker, and logger depending on architectu
 
 Test scripts with packet fixtures, lint/type-check through Zeek, benchmark replay, and validate expected logs—not only notices. Protocol logs are observations from visible traffic; encrypted or asymmetric flows can limit conclusions.
 
+## Event-driven reasoning
+
+Zeek raises events as analyzers interpret connections. Scripts subscribe, update state, write logs, or generate notices. This separates parsing from policy. Inspect existing events/frameworks before duplicating parser work.
+
+Tables and sets can expire entries; schedules defer work; SumStats supports distributed aggregation. Notice policy controls suppression/actions. Intel and files frameworks provide shared enrichment and extraction patterns.
+
+## Cluster architecture
+
+Workers analyze packets, proxies coordinate shared state, managers control configuration, and loggers handle output in common deployments. Load balancing must preserve flow affinity. Cluster scripts need Broker-aware semantics; local tables do not become global automatically.
+
+## Correlation
+
+Use `uid` and Community ID to join connection, DNS, HTTP, TLS, file, and external records. File IDs correlate protocol delivery with hashes, MIME types, extraction, and analyzers.
+
+```shell-session
+analyst@case:~$ zeek-cut uid id.orig_h id.resp_h service < conn.log | rg '^Cc2r01'
+Cc2r01 192.0.2.44 192.0.2.10 ssl
+analyst@case:~$ zeek-cut uid server_name < ssl.log | rg '^Cc2r01'
+Cc2r01 app.example.test
+```
+
+## Mastery lab
+
+Replay DNS, HTTP, TLS, and malformed transactions. Explain every log, correlate by UID, write a typed custom log field, raise a Notice on a marker, and benchmark the script. Repeat with one direction removed and document inference loss.
+
+Missing logs require protocol/analyzer/visibility/checksum review. High `weird.log` volume can mean malformed traffic, loss, or parser limits. Cluster imbalance points to flow distribution. Script type errors must fail CI.
+
 ---
 > 🔼 Up: [[Network Detection & Monitoring Tools]]

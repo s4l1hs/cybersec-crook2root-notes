@@ -7,7 +7,7 @@ tags:
   - cyber/identity
   - type/methodology
   - level/root
-Domain: "[[Web Application Penetration Testing]]"
+Domain: "[[Web Identity & Access Control]]"
 Color: "#DC143C"
 ---
 
@@ -112,5 +112,78 @@ Cleanup: token revoked; account reset
 
 Remediation should unify policy at the identity service, enforce assurance level server-side, remove legacy exceptions, and add detection for unusual enrollment, recovery, and token use.
 
+## Authentication state machine
+
+Model registration, verification, login, challenge, MFA enrollment, trusted device, recovery, password change, logout, revocation, account disablement, and federation linking. Security defects often occur between states rather than inside the password form.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Unverified
+    Unverified --> Active: verify
+    Active --> Challenged: primary credential
+    Challenged --> Session: MFA success
+    Active --> RecoveryPending: recovery request
+    RecoveryPending --> Active: valid single-use proof
+    Session --> Revoked: logout/admin revoke
+    Revoked --> [*]
+```
+
+## Session analysis
+
+Inspect cookie `Secure`, `HttpOnly`, `SameSite`, scope, expiry, rotation, concurrent sessions, idle/absolute timeout, refresh tokens, logout revocation, password/MFA-change invalidation, and server-side device records. Compare token before/after every privilege transition.
+
+## Federation & recovery
+
+For OAuth/OIDC/SAML, validate exact redirect registration, state/nonce, PKCE where applicable, issuer/audience, signature/key selection, claim mapping, account linking, and logout. For recovery, test enumeration resistance, token entropy, expiry, one-time use, identity binding, rate controls, and session invalidation.
+
+## Mastery lab
+
+Use test identities to traverse every state. Record request/response and token hash transitions, test a stale recovery token, role change, MFA reset, concurrent session, and logout from another device. Confirm identity telemetry and notifications. Do not brute-force real accounts.
+
+## Failure analysis
+
+A uniform UI response can still leak timing or delivery behavior. A rotated browser cookie may leave API refresh tokens active. MFA on login may not protect recovery or sensitive actions. Federation can authenticate correctly but map an unsafe role. Report the weakest complete path to account control.
+
 ---
-> 🔼 Up: [[Web Application Penetration Testing]]
+> 🔼 Up: [[Web Identity & Access Control]]
+
+## Core Concept
+
+**Web Authentication Testing** is the atomic learning objective of this note. Identify its trust boundary, prerequisites, attacker-controlled input or state, vulnerable transformation, violated security invariant, minimum evidence, business consequence, and safe stopping point. The mechanism must remain explainable without depending on a specific product.
+
+## Visual Attack Flow
+
+```mermaid
+flowchart LR
+    A["Scoped prerequisite"] --> B["Web Authentication Testing mechanics"]
+    B --> C["Trust boundary crossed"]
+    C --> D["Bounded canary proof"]
+    D --> E["Detection, remediation & retest"]
+```
+
+## Practical Payloads & Execution
+
+```http
+POST /c2r-lab/web-authentication-testing HTTP/1.1
+Host: app.example.test
+Authorization: Bearer <CANARY_IDENTITY>
+Content-Type: application/json
+
+{"object":"C2R-CANARY","test":true}
+```
+
+### Expected output
+
+```text
+HTTP/1.1 200 OK
+X-C2R-Result: vulnerable-condition-observed
+{"marker":"C2R-CANARY-PROOF"}
+```
+
+Treat the output as proof of only the stated condition. Repeat with a negative control, preserve timestamps and the affected build, and never expand impact merely because another path appears reachable.
+
+## Real-World Scenario
+
+A multi-tenant enterprise service exposes a scoped **Web Authentication Testing** condition to a synthetic customer account. The assessor proves one trust-boundary failure with a canary object, correlates application and identity telemetry, removes test state, and assigns the authoritative server-side control.
+
+The durable remediation belongs at the authoritative enforcement layer. Retest the original condition and meaningful variants while verifying legitimate workflows still function.
