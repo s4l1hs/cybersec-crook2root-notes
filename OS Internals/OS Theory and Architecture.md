@@ -16,10 +16,10 @@ Color: "#FFA500"
 
 ## 🗺️ Zero-to-Mastery Curriculum
 
-1. [[Theory of Processes and Threads]] — begin with execution identity, process and thread state, IPC, synchronization, memory ordering, races, deadlocks, and priority inversion.
+1. [[Theory of Processes and Threads|Theory of Processes & Threads]] — begin with execution identity, process and thread state, IPC, synchronization, memory ordering, races, deadlocks, and priority inversion.
 2. [[CPU Scheduling Algorithms]] — learn how runnable work receives CPU time, from classical algorithms through fair and real-time scheduling, then model starvation and resource-exhaustion resistance.
-3. [[Memory Management and Paging]] — follow every address through page tables and TLBs, then master demand paging, replacement, COW, NUMA, allocators, corruption primitives, and mitigation layers.
-4. [[I-O and File System Paradigms]] — complete the foundation by tracing syscalls through VFS, caches, journals, device queues, interrupts, DMA, IOMMU isolation, crash consistency, and forensic evidence.
+3. [[Memory Management and Paging|Memory Management & Paging]] — follow every address through page tables and TLBs, then master demand paging, replacement, COW, NUMA, allocators, corruption primitives, and mitigation layers.
+4. [[I-O and File System Paradigms|I-O & File System Paradigms]] — complete the foundation by tracing syscalls through VFS, caches, journals, device queues, interrupts, DMA, IOMMU isolation, crash consistency, and forensic evidence.
 
 ## Completion Standard
 

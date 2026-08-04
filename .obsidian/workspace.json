@@ -16,8 +16,19 @@
               "icon": "lucide-git-fork",
               "title": "Grafik Görünümü"
             }
+          },
+          {
+            "id": "cd3cd438fdbb49bc",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Grafik Görünümü"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -176,35 +187,35 @@
       "bases:Yeni taban oluştur": false
     }
   },
-  "active": "7c248500a89543cf",
+  "active": "cd3cd438fdbb49bc",
   "lastOpenFiles": [
     "OS Internals/Windows CLI CMD and PowerShell.md",
-    "OS Internals/Linux Boot Process & systemd.md",
-    "CONTRIBUTION.md",
-    "docs/Crook2Root Authoring Standard.md",
+    "OS Internals/Linux.md",
+    "Networking/Protocol Debugging & Deep Inspection.md",
+    "Networking/Connectivity Diagnostics.md",
+    "Networking/Performance & Latency Analysis.md",
+    "Networking/Traffic Analysis & Flow Inspection.md",
+    "Networking/Structured Network Troubleshooting.md",
+    "Networking/Packet Capture & Analysis.md",
+    "Networking/Wireless Reconnaissance & Defense.md",
+    "Networking/Bluetooth & Personal-Area Networks.md",
+    "Networking/Cellular & Long-Range Wireless.md",
+    "Networking/Wireless Attacks & Rogue Infrastructure.md",
+    "Networking/Wi-Fi Security & WPA.md",
+    "Networking/Wireless Fundamentals & 802.11.md",
+    "Networking/Network Analysis & Troubleshooting.md",
+    "Networking/Wireless Networking.md",
+    "Networking/Network Access Control.md",
+    "Networking/Egress Control & Web Proxies.md",
+    "Networking/Intrusion Detection & Network Monitoring.md",
+    "Networking/VPNs & Encrypted Tunnels.md",
+    "Networking/Network Segmentation & Zero Trust.md",
+    "Networking/Firewall Architecture & Policy.md",
+    "Networking/Application Delivery & Load Balancing.md",
+    "Networking/REST & Modern API Transport.md",
+    "Networking/WebSockets & Real-Time Protocols.md",
+    "Networking/Web Architecture & Proxies.md",
     "docs",
-    "AGENTS.md",
-    "OS Internals/Windows Active Directory and Domains.md",
-    "OS Internals/Windows Networking Internals.md",
-    "Offensive Security/SQL Injection.md",
-    "OS Internals/Linux Observability Logging & Forensics.md",
-    "OS Internals/macOS Observability Incident Response & Forensics.md",
-    "OS Internals/Linux Security Controls & Hardening.md",
-    "OS Internals/macOS Networking Internals.md",
-    "OS Internals/Linux Memory & Storage Internals.md",
-    "OS Internals/macOS Identity Keychain & Credentials.md",
-    "OS Internals/Windows Diagnostics Crash Dumps & Performance.md",
-    "OS Internals/Windows Identity Credentials & Authentication.md",
-    "OS Internals/Windows Drivers I-O & Kernel Debugging.md",
-    "OS Internals/Windows Memory Internals & Exploit Mitigations.md",
-    "Offensive Security/CRLF Injection.md",
-    "Tooling & Scripting/Burp Suite.md",
-    "Offensive Security/LDAP Injection.md",
-    "Offensive Security/Server-Side Template Injection.md",
-    "Offensive Security/Operating System Command Injection.md",
-    "Tooling & Scripting/Hydra.md",
-    "Offensive Security/Local File Inclusion.md",
-    "Offensive Security/ORM Injection.md",
     "OS Internals",
     "AI Security",
     "Hardware & IoT Security",
